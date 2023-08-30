@@ -262,10 +262,12 @@ class ResponsiveLayout extends Module{
 			if(column.definition.title && column.field){
 				if(column.modules.format && this.table.options.responsiveLayoutCollapseUseFormatters){
 					const cell = row.getCell(column.field);
+					const element = cell.getElement();
+                			element.style.display = 'block';
 					output.push({
 						field: column.field,
 						title: column.definition.title,
-						value: cell.getElement()
+						value: element
 					});
 				}else{
 					output.push({
@@ -296,7 +298,6 @@ class ResponsiveLayout extends Module{
 
 			if(item.value instanceof HTMLElement){
 				const div = document.createElement("div");
-                		item.value.style.display = 'block';
 				div.appendChild(item.value);
 				valueData.appendChild(div);
 			}else{
