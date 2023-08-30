@@ -296,7 +296,7 @@ class ResponsiveLayout extends Module{
 				titleHighlight.innerHTML = text || item.title;
 			});
 
-			if(item.value instanceof HTMLElement){
+			if(item.value instanceof Node){
 				const div = document.createElement("div");
 				div.appendChild(item.value);
 				valueData.appendChild(div);
