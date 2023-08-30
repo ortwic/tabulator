@@ -253,50 +253,21 @@ class ResponsiveLayout extends Module{
 	}
 
 	generateCollapsedRowData(row){
-		var data = row.getData(),
-		output = [],
-		mockCellComponent;
+		const data = row.getData(),
+		output = [];
 
 		this.hiddenColumns.forEach((column) => {
-			var value = column.getFieldValue(data);
+			const value = column.getFieldValue(data);
 
 			if(column.definition.title && column.field){
 				if(column.modules.format && this.table.options.responsiveLayoutCollapseUseFormatters){
-
-					mockCellComponent = {
-						value:false,
-						data:{},
-						getValue:function(){
-							return value;
-						},
-						getData:function(){
-							return data;
-						},
-						getType:function(){
-							return "cell";
-						},
-						getElement:function(){
-							return document.createElement("div");
-						},
-						getRow:function(){
-							return row.getComponent();
-						},
-						getColumn:function(){
-							return column.getComponent();
-						},
-						getTable:() => {
-							return this.table;
-						},
-					};
-
-					function onRendered(callback){
-						callback();
-					}
-
+					const cell = row.getCell(column.field);
+					const element = cell.getElement();
+                			element.style.display = 'block';
 					output.push({
 						field: column.field,
 						title: column.definition.title,
-						value: column.modules.format.formatter.call(this.table.modules.format, mockCellComponent, column.modules.format.params, onRendered)
+						value: element
 					});
 				}else{
 					output.push({
@@ -312,24 +283,23 @@ class ResponsiveLayout extends Module{
 	}
 
 	formatCollapsedData(data){
-		var list = document.createElement("table");
+		const list = document.createElement("table");
 
 		data.forEach(function(item){
-			var row = document.createElement("tr");
-			var titleData = document.createElement("td");
-			var valueData = document.createElement("td");
-			var node_content;
+			const row = document.createElement("tr");
+			const titleData = document.createElement("td");
+			const valueData = document.createElement("td");
 
-			var titleHighlight = document.createElement("strong");
+			const titleHighlight = document.createElement("strong");
 			titleData.appendChild(titleHighlight);
 			this.langBind("columns|" + item.field, function(text){
 				titleHighlight.innerHTML = text || item.title;
 			});
 
 			if(item.value instanceof Node){
-				node_content = document.createElement("div");
-				node_content.appendChild(item.value);
-				valueData.appendChild(node_content);
+				const div = document.createElement("div");
+				div.appendChild(item.value);
+				valueData.appendChild(div);
 			}else{
 				valueData.innerHTML = item.value;
 			}
